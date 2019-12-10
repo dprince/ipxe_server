@@ -3,7 +3,7 @@
 echo CoreOS Bootstrap
 dhcp net0 && route
 set base-url http://192.168.1.30/~dprince
-set coreos-version rhcos-4.1.0-x86_64
+set coreos-version rhcos-4.2.0-x86_64
 kernel ${base-url}/${coreos-version}-installer-kernel
 initrd ${base-url}/${coreos-version}-installer-initramfs.img
 imgargs ${coreos-version}-installer-kernel coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=${base-url}/${coreos-version}-metal-bios.raw.gz coreos.inst.ignition_url=${base-url}/bootstrap.ign rd.neednet=1
