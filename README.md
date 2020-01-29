@@ -28,16 +28,17 @@ program.
 
 ```bash
 cd ipxe/src
-make bin/undionly.kpxe NO_WERROR=1 V=1 EMBED=dprince.ipxe
+make bin/undionly.kpxe NO_WERROR=1 V=1 EMBED=ocp.ipxe
 ```
 
-Where dprince.ipxe contains something like this:
+Where ocp.ipxe contains something like this:
 
 ```
 #!ipxe
 
 echo Here we go...
-chain --replace --autofree http://192.168.1.30:10080/
+dhcp net0 && route
+chain --replace --autofree http://192.168.130.10:10080?mac=${net0/mac}
 ```
 
 3. Checkout this project. Install golang.

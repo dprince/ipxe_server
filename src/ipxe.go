@@ -5,22 +5,24 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"strings"
 	"time"
+	"net/url"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	addr_file := strings.Split(r.RemoteAddr, ":")[0]
-	file, err := os.Open(addr_file)
+	params, err := url.ParseQuery(r.URL.RawQuery)
+        mac := params["mac"][0]
+	fmt.Printf("%s Looking for MAC : %s\n", time.Now().Format("2006-01-02 15:04:05"), mac)
+	file, err := os.Open(mac)
 	if err != nil {
 		fmt.Fprintln(w, "#!ipxe")
 		fmt.Fprintln(w, "echo no custom ipxe script found. booting locally...")
 		//fmt.Fprintln(w, "exit")
 		fmt.Fprintln(w, "sanboot --no-describe --drive 0x80")
 	} else {
-		fmt.Printf("%s Serving: %s\n", time.Now().Format("2006-01-02 15:04:05"), addr_file)
+		fmt.Printf("%s Serving: %s\n", time.Now().Format("2006-01-02 15:04:05"), mac)
 		io.Copy(w, file)
-		os.Remove(addr_file)
+		os.Remove(mac)
 	}
 }
 
